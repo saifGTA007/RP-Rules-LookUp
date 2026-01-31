@@ -1,8 +1,9 @@
-import { defineConfig } from '@prisma/config';
+import { defineConfig, env } from '@prisma/config';
+import 'dotenv/config';
 
 export default defineConfig({
+  schema: 'prisma/schema.prisma',
   datasource: {
-    // Check all possible variable names
-    url: process.env.POSTGRES_URL,
+    url: env('POSTGRES_URL') || env('DATABASE_URL'),
   },
 });
