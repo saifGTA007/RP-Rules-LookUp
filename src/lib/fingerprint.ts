@@ -13,7 +13,7 @@ export const getFingerprint = async () => {
   const hardwareInfo = [
     renderer,
     navigator.hardwareConcurrency || '8',
-    navigator.deviceMemory || '8',
+    (navigator as any).deviceMemory || '8',
     screen.colorDepth,
     // We use screen.width (the monitor size) NOT window.innerWidth (the browser size)
     screen.width,
