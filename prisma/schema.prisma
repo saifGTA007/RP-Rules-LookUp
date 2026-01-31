@@ -1,0 +1,29 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model InviteToken {
+  id          String   @id @default(cuid())
+  token       String   @unique
+  recipient   String
+  isUsed      Boolean  @default(false)
+  isRevoked   Boolean  @default(false) // New: Toggle access off without deleting
+  createdAt   DateTime @default(now())
+}
+
+model AuthorizedUser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  password     String   // New: Store hashed password
+  hardwareHash String   @unique 
+  isRevoked    Boolean  @default(false)
+  lastAccess   DateTime @default(now())
+  createdAt    DateTime @default(now())
+}
