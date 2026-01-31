@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Rule'
 export type * from './models/InviteToken'
 export type * from './models/AuthorizedUser'
 export type * from './commonInputTypes'

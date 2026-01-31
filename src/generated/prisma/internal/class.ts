@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "// prisma/schema.prisma\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel InviteToken {\n  id        String   @id @default(cuid())\n  token     String   @unique\n  recipient String\n  isUsed    Boolean  @default(false)\n  isRevoked Boolean  @default(false) // New: Toggle access off without deleting\n  createdAt DateTime @default(now())\n}\n\nmodel AuthorizedUser {\n  id           String   @id @default(cuid())\n  username     String   @unique\n  password     String // New: Store hashed password\n  hardwareHash String   @unique\n  isRevoked    Boolean  @default(false)\n  lastAccess   DateTime @default(now())\n  createdAt    DateTime @default(now())\n}\n",
+  "inlineSchema": "// prisma/schema.prisma\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Rule {\n  id        String   @id @default(cuid())\n  title     String   @unique\n  category  String   @default(\"General\")\n  content   String   @db.Text // Use @db.Text for long rule descriptions\n  updatedAt DateTime @updatedAt\n  createdAt DateTime @default(now())\n}\n\nmodel InviteToken {\n  id        String   @id @default(cuid())\n  token     String   @unique\n  recipient String\n  isUsed    Boolean  @default(false)\n  isRevoked Boolean  @default(false) // New: Toggle access off without deleting\n  createdAt DateTime @default(now())\n}\n\nmodel AuthorizedUser {\n  id           String   @id @default(cuid())\n  username     String   @unique\n  password     String // New: Store hashed password\n  hardwareHash String   @unique\n  isRevoked    Boolean  @default(false)\n  lastAccess   DateTime @default(now())\n  createdAt    DateTime @default(now())\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"InviteToken\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"recipient\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isUsed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"isRevoked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"AuthorizedUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hardwareHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isRevoked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"lastAccess\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Rule\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"category\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"InviteToken\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"recipient\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isUsed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"isRevoked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"AuthorizedUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hardwareHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isRevoked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"lastAccess\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -60,8 +60,8 @@ export interface PrismaClientConstructor {
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more InviteTokens
-   * const inviteTokens = await prisma.inviteToken.findMany()
+   * // Fetch zero or more Rules
+   * const rules = await prisma.rule.findMany()
    * ```
    * 
    * Read more in our [docs](https://pris.ly/d/client).
@@ -82,8 +82,8 @@ export interface PrismaClientConstructor {
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more InviteTokens
- * const inviteTokens = await prisma.inviteToken.findMany()
+ * // Fetch zero or more Rules
+ * const rules = await prisma.rule.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -177,6 +177,16 @@ export interface PrismaClient<
   }>>
 
       /**
+   * `prisma.rule`: Exposes CRUD operations for the **Rule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Rules
+    * const rules = await prisma.rule.findMany()
+    * ```
+    */
+  get rule(): Prisma.RuleDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
    * `prisma.inviteToken`: Exposes CRUD operations for the **InviteToken** model.
     * Example usage:
     * ```ts
