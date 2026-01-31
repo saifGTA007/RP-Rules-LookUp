@@ -7,7 +7,7 @@ const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
 const LIMIT = 10; // Max requests
 const WINDOW = 60 * 1000; // per 1 minute
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const forwarded = req.headers.get('x-forwarded-for');
   const ip = forwarded ? forwarded.split(',')[0] : req.headers.get('x-real-ip') ?? '127.0.0.1';
   const now = Date.now();
