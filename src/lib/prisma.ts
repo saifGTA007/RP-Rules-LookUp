@@ -1,16 +1,16 @@
 // src/lib/prisma.ts
-import { Pool } from 'pg';
-import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/prisma/client'; // Import from local folder!
 
-const connectionString = `${process.env.DATABASE_URL}`;
-const pool = new Pool({ connectionString });
-const adapter = new PrismaPg(pool);
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 export const prisma =
   globalForPrisma.prisma ||
-  new PrismaClient({ adapter }); // Pass the adapter here
+  new PrismaClient({
+    // Explicitly pass the URL to the constructor for Prisma 7
+    datasource: {
+      url: process.env.POSTGRES_PRISMA_URL,
+    },
+  } as any); // Type cast may be needed if TS complains about the new config structure
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
