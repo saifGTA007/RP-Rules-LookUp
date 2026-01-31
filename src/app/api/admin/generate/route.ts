@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { randomBytes } from 'crypto';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   const token = Math.random().toString(36).substring(2, 10).toUpperCase();
 
