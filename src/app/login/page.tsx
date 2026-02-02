@@ -32,10 +32,9 @@ export default function LoginPage() {
     
     const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
     const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "";
-    const screenRes = `${window.screen.width}x${window.screen.height}`;
     
     // Simple hash of hardware strings
-    const rawString = `${renderer}-${screenRes}-${navigator.hardwareConcurrency}`;
+    const rawString = `${renderer}-${navigator.hardwareConcurrency}`;
     const msgUint8 = new TextEncoder().encode(rawString);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
