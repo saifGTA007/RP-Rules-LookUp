@@ -47,7 +47,7 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="glass-card p-12 max-w-lg w-full text-center space-y-10 shadow-2xl relative overflow-hidden">
+      <div className="glass-card p-12 max-w-lg w-full text-center space-y-5 shadow-2xl relative overflow-hidden">
         {/* Decorative Background Element */}
         <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
         

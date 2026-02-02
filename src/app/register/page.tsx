@@ -110,7 +110,7 @@ export default function RegisterPage() {
         </button>
       </div>
 
-      <div className="glass-card p-10 max-w-md w-full space-y-6 relative overflow-hidden">
+      <div className="glass-card pt-10 ps-10 pe-10 pb-0 max-w-md w-full space-y-0    relative overflow-hidden">
         <h1 className="text-2xl font-black text-center uppercase tracking-tighter text-white">
           {t.register}
         </h1>
@@ -135,7 +135,7 @@ export default function RegisterPage() {
               className="input-field w-full text-left" 
             />
           </div>
-          <div className="space-y-1">
+          <div className="space-y-1 pb-5">
             <label className="text-[15px] font-bold text-blue-300 block px-1">
               {t.password}
             </label>
