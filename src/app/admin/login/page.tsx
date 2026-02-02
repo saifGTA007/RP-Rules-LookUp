@@ -57,7 +57,7 @@ export default function AdminLogin() {
           )}
 
           <button onClick={handleLogin} className="btn-primary w-full uppercase text-xs tracking-widest">
-            SignUp
+            LogIn
           </button>
           
           <Link href="/" className="block text-[10px] text-blue-300/40 hover:text-blue-300 uppercase tracking-widest transition-colors">
