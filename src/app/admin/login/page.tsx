@@ -9,6 +9,12 @@ export default function AdminLogin() {
   const router = useRouter();
 
   const handleLogin = async () => {
+
+    if (!password.trim()) {
+      setError("PLEASE ENTER PASSWORD");
+      return;
+    }
+
     setError("");
     try {
       const res = await fetch('/api/admin/login', {

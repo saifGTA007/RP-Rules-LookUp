@@ -43,6 +43,12 @@ export default function LoginPage() {
   };
 
   const handleLogin = async () => {
+
+    if (!username.trim() || !password.trim()) {
+      setStatus(lang === 'ar' ? 'يرجى ملء جميع الحقول' : 'PLEASE FILL IN ALL FIELDS');
+      return;
+    }
+    
     setIsLoading(true);
     setStatus('VERIFYING...');
 

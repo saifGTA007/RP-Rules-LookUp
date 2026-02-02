@@ -48,6 +48,11 @@ export default function RegisterPage() {
 
   // 3. REGISTRATION HANDLER
   const handleRegister = async () => {
+
+    if (!token.trim() || !username.trim() || !password.trim()) {
+      setStatus(lang === 'ar' ? 'يرجى ملء جميع الحقول' : 'PLEASE FILL IN ALL FIELDS');
+      return;
+    }
     setStatus('CONNECTING...'); // Initial feedback
     try {
       const hardwareHash = await getFingerprint();
