@@ -1,9 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getLanguageCookie, setLanguageCookie } from '@/lib/lang-config';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { getLanguageCookie, setLanguageCookie } from '@/lib/lang-config';
 import { translations } from '@/lib/translations';
+import { getFingerprint } from '@/lib/fingerprint';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,35 +26,6 @@ export default function LoginPage() {
 
   const t = translations[lang];
 
- const getFingerprint = async () => {
-  if (typeof window === 'undefined') return "ssr-fallback";
-
-  const canvas = document.createElement('canvas');
-  const gl = canvas.getContext('webgl');
-  let renderer = "unknown";
-  
-  if (gl) {
-    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-    renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "standard-gl";
-  }
-  
-  // ONLY INTERNAL HARDWARE
-  // No screen, no ratio, no dimensions.
-  const hardwareData = {
-    gpu: renderer,
-    cores: navigator.hardwareConcurrency || 0,
-    platform: navigator.platform,
-    touchPoints: navigator.maxTouchPoints || 0
-  };
-  
-  // Generate the hash
-  const rawString = JSON.stringify(hardwareData);
-  const msgUint8 = new TextEncoder().encode(rawString);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-};
 
   const handleLogin = async () => {
 
@@ -67,6 +39,7 @@ export default function LoginPage() {
 
     try {
       const hardwareHash = await getFingerprint();
+      console.log('trying to connect with :', username, ' - ', password, ' - ', hardwareHash)
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -76,11 +49,12 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (res.ok) {
-        setStatus(lang === 'ar' ? '! تم التحقق بنجاح' : 'ACCESS GRANTED');
+        setStatus('ACCESS GRANTED');
         // Set session cookie
         document.cookie = `user_session=${hardwareHash}; path=/; SameSite=Lax`;
         setTimeout(() => router.push('/vault'), 1000);
       } else {
+        console.log("server msg :", data.error)
         setStatus(data.error || lang === 'ar' ? 'معلومات خاطئة' : 'INVALID CREDENTIALS');
       }
     } catch (err) {
@@ -147,7 +121,9 @@ export default function LoginPage() {
 
         {status && status === 'ACCESS GRANTED' ? (
           <>
-            <p className="text-center text-[10px] text-green-500 font-bold">{status}</p>
+            <p className="text-center text-[10px] text-green-500 font-bold">
+              {lang === 'ar' ? 'تم التحقق بنجاح !' : 'ACCESS GRANTED'}
+            </p>
             <p className="text-center text-[10px] text-green-500 animate-pulse font-bold">REDIRECTING...</p>
           </>
         ):(status === 'VERIFYING' ?

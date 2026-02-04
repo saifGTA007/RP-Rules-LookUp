@@ -4,6 +4,7 @@ import { getLanguageCookie, setLanguageCookie } from '@/lib/lang-config';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { translations } from '@/lib/translations';
+import { getFingerprint } from '@/lib/fingerprint';
 import { stat } from 'fs';
 
 export default function RegisterPage() {
@@ -28,24 +29,6 @@ export default function RegisterPage() {
   };
 
   const t = translations[lang];
-
-  // 2. FINGERPRINT LOGIC
-  const getFingerprint = async () => {
-    const canvas = document.createElement('canvas');
-    const gl = canvas.getContext('webgl');
-    if (!gl) return "standard-hash";
-    
-    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-    const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "";
-    const screenRes = `${window.screen.width}x${window.screen.height}`;
-    
-    // Simple hash of hardware strings
-    const rawString = `${renderer}-${screenRes}-${navigator.hardwareConcurrency}`;
-    const msgUint8 = new TextEncoder().encode(rawString);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  };
 
   // 3. REGISTRATION HANDLER
   const handleRegister = async () => {

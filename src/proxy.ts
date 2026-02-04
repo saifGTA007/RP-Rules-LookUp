@@ -4,7 +4,9 @@ import type { NextRequest } from 'next/server';
 // Simple in-memory cache for rate limiting
 const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
 
-const LIMIT = 10; // Max requests
+const isDev = process.env.NODE_ENV === 'development';
+
+const LIMIT = isDev ? 200 : 50; // Max requests
 const WINDOW = 60 * 1000; // per 1 minute
 
 export async function proxy(req: NextRequest) {
@@ -27,7 +29,7 @@ export async function proxy(req: NextRequest) {
 
     if (rateData.count > LIMIT) {
       return new NextResponse(
-        JSON.stringify({ error: "TOO_MANY_REQUESTS_RETRY_LATER" }),
+        JSON.stringify({ error: "TOO MANY REQUESTS, RETRY LATER" }),
         { status: 429, headers: { 'Content-Type': 'application/json' } }
       );
     }

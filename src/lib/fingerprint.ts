@@ -1,4 +1,4 @@
-const getFingerprint = async () => {
+export const getFingerprint = async () => {
   if (typeof window === 'undefined') return "ssr-fallback";
 
   const canvas = document.createElement('canvas');
