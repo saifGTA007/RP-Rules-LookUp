@@ -4,6 +4,7 @@ import { getLanguageCookie, setLanguageCookie } from '@/lib/lang-config';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { translations } from '@/lib/translations';
+import { stat } from 'fs';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function RegisterPage() {
       setStatus(lang === 'ar' ? 'يرجى ملء جميع الحقول' : 'PLEASE FILL IN ALL FIELDS');
       return;
     }
-    setStatus('CONNECTING...'); // Initial feedback
+    setStatus(lang === 'ar' ? 'جاري الاتصال...' : 'CONNECTING...'); // Initial feedback
     try {
       const hardwareHash = await getFingerprint();
       const res = await fetch('/api/auth/register', {
@@ -70,10 +71,11 @@ export default function RegisterPage() {
         setTimeout(() => router.push('/vault'), 1500);
       } else {
         // Fail feedback
-        setStatus(data.error === 'TOKEN REVOKED' ? 'TOKEN REVOKED' : 'REGISTRATION FAILED');
+        setStatus(data.error === 'TOKEN REVOKED' ? (lang === 'ar' ? 'تم إلغاء الرمز الدعوة ' : 'TOKEN REVOKED') : 
+                                                   (lang === 'ar' ? 'فشل تسجيل الدخول' : 'REGISTRATION FAILED'));
       }
     } catch (err) {
-      setStatus('CONNECTION ERROR');
+      setStatus(lang === 'ar' ? 'خطئ في الاتصال' : 'CONNECTION ERROR');
     }
   };
   return (
@@ -165,10 +167,11 @@ export default function RegisterPage() {
         {status && status === 'SUCCESS' ? (
           <div className="pt-4 text-center">
              <span className="text-[12px] font-bold text-green-500 px-4 py-1 rounded-full">
-               {status}
+               {lang === 'ar' ? 'تم الاتصال بنجاح' : 'SUCCESS'}
              </span>
+             <br/>
              <span className="text-[12px] font-bold text-green-500 px-4 py-1 rounded-full animate-pulse">
-               REDIRECTING ...
+               {lang === 'ar' ? '... REDIRECTING' : 'REDIRECTING ...'}
              </span>
           </div>
         ):(

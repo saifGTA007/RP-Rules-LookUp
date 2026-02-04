@@ -19,7 +19,7 @@ export default function VaultTerminal({ initialLang, initialUsername }: { initia
   const t = translations[lang];
 
   const toggleLang = () => {
-    const newLang = lang === 'ar' ? 'en' : 'ar';
+    const newLang = t.lang;
     setLang(newLang);
     setLanguageCookie(newLang);
   };

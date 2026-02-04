@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/prisma';
 import VaultTerminal from '@/components/VaultTerminal';
-import { translations } from '@/lib/translations';
 import { cookies } from 'next/headers';
 
 export default async function VaultPage() {

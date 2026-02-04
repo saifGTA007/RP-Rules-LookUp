@@ -10,8 +10,8 @@ const getFingerprint = async () => {
     renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "standard-gl";
   }
   
-  // STABLE HARDWARE DATA
-  // We use screen.width/height (The monitor) NOT innerWidth (The window)
+  // ONLY INTERNAL HARDWARE
+  // No screen, no ratio, no dimensions.
   const hardwareData = {
     gpu: renderer,
     cores: navigator.hardwareConcurrency || 0,
