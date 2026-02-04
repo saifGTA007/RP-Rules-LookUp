@@ -12,7 +12,6 @@ export async function POST(req: Request) {
       where: { username }
     });
 
-    console.log('foundUser with username ', username,' ? : ', user)
 
     if (!user || user.password !== password) {
       return NextResponse.json({ error: "INVALID CREDENTIALS" }, { status: 401 });
@@ -20,9 +19,6 @@ export async function POST(req: Request) {
 
     // Check if the PC being used is the one they registered with
     if (user.hardwareHash !== hardwareHash) {
-      console.log("invalid hardwareHash")
-      console.log("got   : ", hardwareHash)
-      console.log("found : ", user.hardwareHash)
       return NextResponse.json({ error: "UNAUTHORIZED HARDWARE" }, { status: 403 });
     }
 

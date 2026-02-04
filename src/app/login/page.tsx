@@ -39,7 +39,6 @@ export default function LoginPage() {
 
     try {
       const hardwareHash = await getFingerprint();
-      console.log('trying to connect with :', username, ' - ', password, ' - ', hardwareHash)
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -54,7 +53,6 @@ export default function LoginPage() {
         document.cookie = `user_session=${hardwareHash}; path=/; SameSite=Lax`;
         setTimeout(() => router.push('/vault'), 1000);
       } else {
-        console.log("server msg :", data.error)
         setStatus(data.error || lang === 'ar' ? 'معلومات خاطئة' : 'INVALID CREDENTIALS');
       }
     } catch (err) {
