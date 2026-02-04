@@ -96,9 +96,9 @@ export default function VaultTerminal({ initialUsername }: { initialUsername: st
 
         {/* Mode Selector */}
         <div className="flex justify-center gap-3">
-          {['normal', 'LocalOOC', 'dm'].map((m) => (
+          {['Normal', 'LocalOOC', 'dm'].map((m) => (
             <button key={m} onClick={() => setMode(m)} className={`px-5 py-2 rounded-xl text-[10px] font-bold uppercase transition-all border ${mode === m ? 'bg-blue-600 border-blue-400 text-white' : 'bg-white/5 border-white/10 text-blue-300/50'}`}>
-              {m === 'normal' ? t.normal : m}
+              {m}
             </button>
           ))}
         </div>
