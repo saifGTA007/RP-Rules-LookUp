@@ -2,11 +2,18 @@ import { prisma } from '@/lib/prisma';
 import VaultTerminal from '@/components/VaultTerminal';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { getLanguageCookie, setLanguageCookie } from '@/lib/lang-config';
+import { useEffect, useState } from 'react';
+
 
 export default async function VaultPage() {
   const cookieStore = await cookies();
+  
+  const [lang, setLang] = useState('ar')
   const sessionHash = cookieStore.get('user_session')?.value;
-  const lang = cookieStore.get('language')?.value || 'ar';
+    useEffect(() => {
+      setLang(getLanguageCookie());
+  }, []);
 
   // 1. If no cookie at all, kick them to login
   if (!sessionHash) {
