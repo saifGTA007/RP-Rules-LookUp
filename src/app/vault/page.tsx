@@ -1,20 +1,29 @@
 import { prisma } from '@/lib/prisma';
 import VaultTerminal from '@/components/VaultTerminal';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export default async function VaultPage() {
   const cookieStore = await cookies();
-  const lang = (await cookieStore).get('language')?.value || 'ar';
-  
-  // Fetch user profile on the server for security
-  // If you have a real session, replace this with your auth check
-  let username = "OPERATOR";
-  try {
-    const user = await prisma.authorizedUser.findFirst(); // Example fetch
-    if (user) username = user.username;
-  } catch (e) {
-    username = "GUEST";
+  const sessionHash = cookieStore.get('user_session')?.value;
+  const lang = cookieStore.get('language')?.value || 'ar';
+
+  // 1. If no cookie at all, kick them to login
+  if (!sessionHash) {
+    redirect('/');
   }
 
-  return <VaultTerminal initialLang={lang} initialUsername={username} />;
+  // 2. Look for a user that owns this specific hardware hash
+  const user = await prisma.authorizedUser.findFirst({
+    where: { hardwareHash: sessionHash }
+  });
+
+  // 3. If the cookie exists but doesn't match any hardware in our DB, kick them
+  if (!user) {
+    // Optional: Delete the invalid cookie here if you want
+    redirect('/');
+  }
+
+  // 4. Success - Only authorized hardware gets here
+  return <VaultTerminal initialLang={lang} initialUsername={user.username} />;
 }

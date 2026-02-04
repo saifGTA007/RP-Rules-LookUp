@@ -50,7 +50,8 @@ export default function LoginPage() {
       if (res.ok) {
         setStatus('ACCESS GRANTED');
         // Set session cookie
-        document.cookie = `user_session=${hardwareHash}; path=/; SameSite=Lax`;
+        const secureFlag = window.location.protocol === 'https:' ? 'Secure;' : '';
+        document.cookie = `user_session=${hardwareHash}; path=/; Max-Age=604800; SameSite=Lax; ${secureFlag}`;
         setTimeout(() => router.push('/vault'), 1000);
       } else {
         setStatus(data.error || lang === 'ar' ? 'معلومات خاطئة' : 'INVALID CREDENTIALS');

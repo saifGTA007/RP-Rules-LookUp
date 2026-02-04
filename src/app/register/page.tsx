@@ -50,8 +50,10 @@ export default function RegisterPage() {
 
       if (res.ok) {
         setStatus('SUCCESS');
-        document.cookie = `user_session=${hardwareHash}; path=/; SameSite=Lax`;
-        setTimeout(() => router.push('/vault'), 1500);
+        // Set session cookie
+        const secureFlag = window.location.protocol === 'https:' ? 'Secure;' : '';
+        document.cookie = `user_session=${hardwareHash}; path=/; Max-Age=604800; SameSite=Lax; ${secureFlag}`;
+        setTimeout(() => router.push('/vault'), 1000);
       } else {
         // Fail feedback
         setStatus(data.error === 'TOKEN REVOKED' ? (lang === 'ar' ? 'تم إلغاء الرمز الدعوة ' : 'TOKEN REVOKED') : 
