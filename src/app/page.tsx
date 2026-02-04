@@ -72,6 +72,15 @@ export default function Home() {
           </Link>
         </div>
 
+          <div className=" px-3 ">
+            <span className="text-[14px] font-bold text-white uppercase  animate-pulse">
+              {lang === 'ar' ? 'هام' : 'Important'}
+            </span>
+            <br />
+            <span className="text-[12px] text-white ">
+              {lang === 'ar' ? 'دائما استعمل نفس محرك البحث للتسجيل و تسجيل الدخلول' : 'Allways use the same browser for login and signup.'}
+            </span>
+          </div>
         <div className="pt-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mt-[-2px]"></div>
