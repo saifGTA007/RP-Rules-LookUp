@@ -1,3 +1,4 @@
+'use client';
 import { prisma } from '@/lib/prisma';
 import VaultTerminal from '@/components/VaultTerminal';
 import { cookies } from 'next/headers';
