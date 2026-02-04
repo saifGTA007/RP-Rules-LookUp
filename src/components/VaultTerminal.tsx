@@ -16,10 +16,10 @@ export default function VaultTerminal({ initialLang, initialUsername }: { initia
   const [showCopyNote, setShowCopyNote] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const t = translations[lang];
+  const t = translations[lang] || translations['ar'];;
 
   const toggleLang = () => {
-    const newLang = t.lang;
+    const newLang = lang === 'ar' ? 'en' : 'ar';
     setLang(newLang);
     setLanguageCookie(newLang);
   };
