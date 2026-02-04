@@ -4,7 +4,7 @@ import { translations } from '@/lib/translations';
 import { getLanguageCookie, setLanguageCookie } from '@/lib/lang-config';
 import Link from 'next/link';
 
-export default function VaultTerminal({ initialUsername }: { initialLang: string, initialUsername: string }) {
+export default function VaultTerminal({ initialUsername }: { initialUsername: string }) {
   const [lang, setLang] = useState('ar');
   const [username] = useState(initialUsername);
   const [ruleKey, setRuleKey] = useState('');
