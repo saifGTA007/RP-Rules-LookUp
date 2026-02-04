@@ -54,7 +54,9 @@ export default function LoginPage() {
         document.cookie = `user_session=${hardwareHash}; path=/; Max-Age=604800; SameSite=Lax; ${secureFlag}`;
         setTimeout(() => router.push('/vault'), 1000);
       } else {
-        setStatus(data.error || lang === 'ar' ? 'معلومات خاطئة' : 'INVALID CREDENTIALS');
+        // Fail feedback
+        setStatus(data.error === 'ACCOUNT REVOKED' ? (lang === 'ar' ? 'تم ايقاف الحساب ' : 'ACCOUNT REVOKED') : 
+                                                   (lang === 'ar' ? 'فشل تسجيل الدخول' : 'REGISTRATION FAILED'));
       }
     } catch (err) {
       setStatus(lang === 'ar' ? 'خطئ من الخادم' : 'SERVER ERROR');
