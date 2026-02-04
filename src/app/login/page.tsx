@@ -63,7 +63,7 @@ export default function LoginPage() {
     }
     
     setIsLoading(true);
-    setStatus(lang === 'ar' ? 'جاري التحقق ...' : 'VERIFYING...');
+    setStatus('VERIFYING');
 
     try {
       const hardwareHash = await getFingerprint();
@@ -150,7 +150,10 @@ export default function LoginPage() {
             <p className="text-center text-[10px] text-green-500 font-bold">{status}</p>
             <p className="text-center text-[10px] text-green-500 animate-pulse font-bold">REDIRECTING...</p>
           </>
-        ):(
+        ):(status === 'VERIFYING' ?
+          
+          <p className="text-center text-[10px] text-yellow-500 font-bold">{lang === 'ar' ? 'جاري التحقق ...' : 'VERIFYING...'}</p>
+          :
           <p className="text-center text-[10px] text-red-500 font-bold">{status}</p>
         )}
       </div>

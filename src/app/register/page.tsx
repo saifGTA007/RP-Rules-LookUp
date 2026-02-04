@@ -54,7 +54,7 @@ export default function RegisterPage() {
       setStatus(lang === 'ar' ? 'يرجى ملء جميع الحقول' : 'PLEASE FILL IN ALL FIELDS');
       return;
     }
-    setStatus(lang === 'ar' ? 'جاري الاتصال...' : 'CONNECTING...'); // Initial feedback
+    setStatus('CONNECTING'); // Initial feedback
     try {
       const hardwareHash = await getFingerprint();
       const res = await fetch('/api/auth/register', {
@@ -175,11 +175,20 @@ export default function RegisterPage() {
              </span>
           </div>
         ):(
-          <div className="pt-4 text-center">
-             <span className="text-[12px] font-bold text-red-500 px-4 py-1 rounded-full">
-               {status}
-             </span>
-          </div>
+          
+          status === 'CONNECTING' ? (
+            <div className="pt-4 text-center">
+              <span className="text-[12px] font-bold text-yellow-500 px-4 py-1 rounded-full">
+                {lang === 'ar' ? 'جاري الاتصال...' : 'CONNECTING...'}
+              </span>
+            </div>
+          ):(
+            <div className="pt-4 text-center">
+                <span className="text-[12px] font-bold text-red-500 px-4 py-1 rounded-full">
+                 {status}
+               </span>
+            </div>
+          )
         )}
       </div>
     </main>
