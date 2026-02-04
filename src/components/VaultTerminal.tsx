@@ -1,11 +1,11 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { translations } from '@/lib/translations';
-import { setLanguageCookie } from '@/lib/lang-config';
+import { getLanguageCookie, setLanguageCookie } from '@/lib/lang-config';
 import Link from 'next/link';
 
-export default function VaultTerminal({ initialLang, initialUsername }: { initialLang: string, initialUsername: string }) {
-  const [lang, setLang] = useState(initialLang);
+export default function VaultTerminal({ initialUsername }: { initialLang: string, initialUsername: string }) {
+  const [lang, setLang] = useState('ar');
   const [username] = useState(initialUsername);
   const [ruleKey, setRuleKey] = useState('');
   const [mode, setMode] = useState('normal');
@@ -16,7 +16,11 @@ export default function VaultTerminal({ initialLang, initialUsername }: { initia
   const [showCopyNote, setShowCopyNote] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const t = translations[lang] || translations['ar'];;
+  const t = translations[lang] || translations['ar'];
+
+  useEffect(() => {
+      setLang(getLanguageCookie());
+  }, []);
 
   const toggleLang = () => {
     const newLang = lang === 'ar' ? 'en' : 'ar';
